@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"Version": 0,
+	"VersionName": "0.0",
+	"EngineVersion": "4.1.1-0+UE4",
+	"PackageFileUE4Version": 352,
+	"PackageFileLicenseeUE4Version": 0,
+	"EngineAssociation": "{41B69314-4AA8-29BE-8221-4888BEA87025}",
+	"FriendlyName": "",
+	"Description": "",
+	"Category": "",
+	"CreatedBy": "",
+	"CreatedByURL": "",
+	"Modules": [
+		{
+			"Name": "Pentris",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"EpicSampleNameHash": "0"
+}
