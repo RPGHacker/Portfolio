@@ -10,3 +10,11 @@ Pentris/*.sdf
 Pentris/*.opensdf
 Pentris/*.suo
 Pentris/*.sln
+KokkuEngine/DerivedDataCache
+KokkuEngine/Intermediate
+KokkuEngine/Saved
+KokkuEngine/Binaries/Win64/*.pdb
+KokkuEngine/*.sdf
+KokkuEngine/*.opensdf
+KokkuEngine/*.suo
+KokkuEngine/*.sln

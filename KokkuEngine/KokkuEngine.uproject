@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{EB6A1302-4533-A487-9B9A-F79A5316348F}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "KokkuEngine",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
