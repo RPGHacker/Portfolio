@@ -2,14 +2,6 @@
 # Unreal Engine #
 # ============= #
 
-Pentris/DerivedDataCache
-Pentris/Intermediate
-Pentris/Saved
-Pentris/Binaries/Win64/*.pdb
-Pentris/*.sdf
-Pentris/*.opensdf
-Pentris/*.suo
-Pentris/*.sln
 KokkuEngine/DerivedDataCache
 KokkuEngine/Intermediate
 KokkuEngine/Saved
