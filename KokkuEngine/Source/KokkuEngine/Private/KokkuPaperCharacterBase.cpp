@@ -51,7 +51,7 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 
 	this->WalkingSpeed = 600.0f;
 	this->RunningSpeed = 1500.0f;
-	this->MaxJumpVelocity = 1000.0f;
+	this->RunningJumpVelocityBonus = 0.25f;
 
 	// Configure character movement
 	this->CharacterMovement->bOrientRotationToMovement = false;
@@ -64,7 +64,7 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	this->CharacterMovement->GroundFriction = 3.0f;
 	this->CharacterMovement->MaxWalkSpeed = this->WalkingSpeed;
 	this->CharacterMovement->MaxFlySpeed = this->RunningSpeed;
-	this->CharacterMovement->JumpZVelocity = this->MaxJumpVelocity;
+	this->CharacterMovement->JumpZVelocity = 500.0f;
 	this->CharacterMovement->MaxWalkSpeedCrouched = 0.0f;
 	this->CharacterMovement->bUseFlatBaseForFloorChecks = true;
 
@@ -82,21 +82,29 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 //////////////////////////////////////////////////////////////////////////
 // Logic
 
+void AKokkuPaperCharacterBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	this->InitialJumpVelocity = this->CharacterMovement->JumpZVelocity;
+}
+
 void AKokkuPaperCharacterBase::Tick(float DeltaSeconds)
 {
+	Super::Tick(DeltaSeconds);
+
 	FVector CameraPosition = this->CharacterCamera->GetComponentLocation();
 	this->CharacterCamera->bAbsoluteLocation = true;
 	this->CharacterCamera->bAbsoluteRotation = true;
 	CameraPosition.X = this->CapsuleComponent->GetComponentLocation().X;
 	this->CharacterCamera->SetWorldLocation(CameraPosition);
 
+	float JumpSpeed = this->GetVelocity().Z;
+	if (JumpSpeed < 0.0f)
+		this->bJumpButtonHeld = false;
+	
 	if (this->CharacterMovement->IsFalling())
 	{
-		if (this->bPressedJump)
-			this->CharacterMovement->JumpZVelocity = (1.0f - FMath::Clamp<float>((this->JumpKeyHoldTime - (this->JumpMaxHoldTime * 0.25f)) / this->JumpMaxHoldTime, 0.0f, 0.75f)) * this->MaxJumpVelocity;
-		else
-			this->CharacterMovement->JumpZVelocity = this->MaxJumpVelocity * 0.25f;		// TODO: Fix me
-
 		this->CharacterMovement->MaxWalkSpeedCrouched = this->CharacterMovement->MaxWalkSpeed;
 	}
 	else
@@ -105,6 +113,9 @@ void AKokkuPaperCharacterBase::Tick(float DeltaSeconds)
 			this->CharacterMovement->MaxWalkSpeed = this->RunningSpeed;
 		else
 			this->CharacterMovement->MaxWalkSpeed = this->WalkingSpeed;
+
+		float JumpVelocityBonus = FMath::Clamp<float>((FMath::Abs(this->GetVelocity().X) - this->WalkingSpeed) / (this->RunningSpeed / this->WalkingSpeed), 0.0f, 1.0f) * this->RunningJumpVelocityBonus * this->InitialJumpVelocity;
+		this->CharacterMovement->JumpZVelocity = this->InitialJumpVelocity + JumpVelocityBonus;
 
 		this->CharacterMovement->MaxWalkSpeedCrouched = 0.0f;
 	}
@@ -184,7 +195,7 @@ void AKokkuPaperCharacterBase::UpdateAnimation()
 bool AKokkuPaperCharacterBase::CanJumpOverride()
 {
 	// TODO: Fix me
-	const bool bCanHoldToJumpHigher = (this->GetJumpMaxHoldTime() > 0.0f) && this->IsJumping();
+	const bool bCanHoldToJumpHigher = (this->GetJumpMaxHoldTime() > 0.0f) && this->IsJumpProvidingForce();
 
 	return this->CharacterMovement && (this->CharacterMovement->IsMovingOnGround() || bCanHoldToJumpHigher) && this->CharacterMovement->CanEverJump();
 }
@@ -210,12 +221,16 @@ void AKokkuPaperCharacterBase::SetupPlayerInputComponent(class UInputComponent* 
 
 void AKokkuPaperCharacterBase::JumpPressedInput()
 {
+	this->bJumpButtonHeld = true;
 	if (this->CanJumpOverride())
 		this->Jump();
 }
 
 void AKokkuPaperCharacterBase::JumpReleasedInput()
 {
+	if (this->IsJumpProvidingForce() || this->bJumpButtonHeld)
+		this->LaunchCharacter(FVector(0.0f, 0.0f, -(this->GetVelocity().Z * 0.5f)), false, false);
+	this->bJumpButtonHeld = false;
 	this->StopJumping();
 }
 

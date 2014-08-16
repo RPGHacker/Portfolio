@@ -14,9 +14,27 @@ UKokkuSingletonFunctionLibrary::UKokkuSingletonFunctionLibrary(const class FPost
 
 UKokkuSingleton* UKokkuSingletonFunctionLibrary::GetKokkuSingleton()
 {
-	UKokkuSingleton* SingletonInstance = Cast<UKokkuSingleton>(GEngine->GameSingleton);
+	if (GEngine)
+	{
+		class UKokkuSingleton* SingletonInstance = Cast<UKokkuSingleton>(GEngine->GameSingleton);
 
-	if (!SingletonInstance || !(SingletonInstance->IsValidLowLevel())) return nullptr;
+		if (!SingletonInstance || !(SingletonInstance->IsValidLowLevel())) return nullptr;
 
-	return SingletonInstance;
+		return SingletonInstance;
+	}
+
+	return nullptr;
+}
+
+UKokkuGameInstance* UKokkuSingletonFunctionLibrary::GetKokkuGameInstance(UObject* WorldContextObject)
+{
+	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(WorldContextObject);
+
+	if (GameInstance != nullptr)
+	{
+		UKokkuGameInstance* KokkuGameInstance = Cast<UKokkuGameInstance>(GameInstance);
+		return KokkuGameInstance;
+	}
+
+	return nullptr;
 }

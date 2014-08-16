@@ -26,27 +26,27 @@ class KOKKUENGINE_API AKokkuPaperCharacterBase : public APaperCharacter
 	TSubobjectPtr<UCameraComponent> CharacterCamera;
 
 	/** Character's idle animation */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character, meta = (DisplayThumbnail = "true"))
 	class UPaperFlipbook* IdleAnimation;
 
 	/** Character's walk animation */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character, meta = (DisplayThumbnail = "true"))
 	class UPaperFlipbook* WalkAnimation;
 
 	/** Character's run animation */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character, meta = (DisplayThumbnail = "true"))
 	class UPaperFlipbook* RunAnimation;
 
 	/** Character's jump animation */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character, meta = (DisplayThumbnail = "true"))
 	class UPaperFlipbook* JumpAnimation;
 
 	/** Character's fall animation */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character, meta = (DisplayThumbnail = "true"))
 	class UPaperFlipbook* FallAnimation;
 
 	/** Character's duck animation */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character, meta = (DisplayThumbnail = "true"))
 	class UPaperFlipbook* DuckAnimation;
 
 	/** Max walking speed */
@@ -57,13 +57,16 @@ class KOKKUENGINE_API AKokkuPaperCharacterBase : public APaperCharacter
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character)
 	float RunningSpeed;
 
-	/** Max jump velocity */
+	/** Factor of original jump velocity to add to jump when jumping at full running speed */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character)
-	float MaxJumpVelocity;
+	float RunningJumpVelocityBonus;
 
 protected:
 	/** Character is holding run button*/
 	bool bRunButtonHeld;
+
+	/** Character is holding jump button*/
+	bool bJumpButtonHeld;
 
 	/** Can jump override */
 	bool CanJumpOverride();
@@ -92,7 +95,11 @@ protected:
 	/** Walk Left/Right input function */
 	void WalkLeftRightInput(float InputValue);
 
+	/** Unaltered jump velocity */
+	float InitialJumpVelocity;
+
 	// AActor interface
+	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 	// End of AActor interface
 

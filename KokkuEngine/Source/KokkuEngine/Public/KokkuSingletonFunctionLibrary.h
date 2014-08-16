@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "KokkuSingleton.h"
 #include "KokkuSingletonFunctionLibrary.generated.h"
 
@@ -16,5 +17,9 @@ class KOKKUENGINE_API UKokkuSingletonFunctionLibrary : public UBlueprintFunction
 
 	/** Return game's singleton */
 	UFUNCTION(BlueprintPure, Category = "Kokku Singleton")
-	static UKokkuSingleton* GetKokkuSingleton();
+	static class UKokkuSingleton* GetKokkuSingleton();
+
+	/** Return game instance */
+	UFUNCTION(BlueprintPure, Category = "Kokku Game Instance", meta = (HidePin = "WorldContextObject", DefaultToSelf = "WorldContextObject"))
+	static class UKokkuGameInstance* GetKokkuGameInstance(UObject* WorldContextObject);
 };

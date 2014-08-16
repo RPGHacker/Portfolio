@@ -101,14 +101,11 @@ void UKokkuPaperFlipbookComponent::KokkuTickFlipbook(float DeltaTime)
 		this->SetPlaybackPosition(NewPosition, true);
 	}
 
-#if 0
 	// Notify user that timeline finished
 	if (bIsFinished)
 	{
-		this->TimelineFinishedFunc.ExecuteIfBound();
-		this->TimelineFinishFuncStatic.ExecuteIfBound();
+		this->OnFinishedPlaying.Broadcast();
 	}
-#endif
 }
 
 

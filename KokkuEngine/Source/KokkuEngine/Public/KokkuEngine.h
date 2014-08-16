@@ -4,6 +4,7 @@
 
 #include "Engine.h"
 #include "KokkuGameModeBase.h"
+#include "KokkuGameInstance.h"
 #include "KokkuSingleton.h"
 #include "KokkuSingletonFunctionLibrary.h"
 #include "KokkuLevelScriptActor.h"

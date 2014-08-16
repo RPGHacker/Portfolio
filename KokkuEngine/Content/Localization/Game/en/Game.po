@@ -1,0 +1,45 @@
+﻿# Game English translation.
+# Copyright 1998-2014 Epic Games, Inc. All Rights Reserved.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Game\n"
+"POT-Creation-Date: 2014-08-15 14:01\n"
+"PO-Revision-Date: 2014-08-15 14:01\n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. /Game/Maps/DefaultMap.Default__DefaultMap_C.LevelName
+#: /Game/Maps/DefaultMap.Default__DefaultMap_C.LevelName
+msgctxt "Level Names"
+msgid "Default Map"
+msgstr "Default Map"
+
+#. /../../../../GitHub/Portfolio/KokkuEngine/Source/KokkuEngine/Private/KokkuLevelScriptActor.cpp:10
+#: /../../../../GitHub/Portfolio/KokkuEngine/Source/KokkuEngine/Private/KokkuLevelScriptActor.cpp:10
+msgctxt "Level Names"
+msgid "New Level"
+msgstr "New Level"
+
+#. /Game/Maps/DefaultMap.DefaultMap:PersistentLevel.TestCharacter_C_2.Arrow.DisplayName
+#: /Game/Maps/DefaultMap.DefaultMap:PersistentLevel.TestCharacter_C_2.Arrow.DisplayName
+msgctxt "SpriteCategory"
+msgid "Characters"
+msgstr "Characters"
+
+#. /Game/Maps/DefaultMap.DefaultMap:PersistentLevel.LightSource.ArrowComponent0.DisplayName
+#: /Game/Maps/DefaultMap.DefaultMap:PersistentLevel.LightSource.ArrowComponent0.DisplayName
+msgctxt "SpriteCategory"
+msgid "Lighting"
+msgstr "Lighting"
+
+#. /Game/Maps/DefaultMap.DefaultMap:PersistentLevel.AtmosphericFog_1.Sprite.DisplayName
+#: /Game/Maps/DefaultMap.DefaultMap:PersistentLevel.AtmosphericFog_1.Sprite.DisplayName
+msgctxt "SpriteCategory"
+msgid "Misc"
+msgstr "Misc"
+

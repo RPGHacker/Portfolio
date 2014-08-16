@@ -37,7 +37,7 @@ AActor* AKokkuGameModeBase::ChoosePlayerStart(AController* Player)
 
 		if (PlayerStartByClass != nullptr)
 		{
-			APawn* ControlledPawn = Player->GetControlledPawn();
+			APawn* ControlledPawn = Player->GetPawn();
 
 			if (ControlledPawn != nullptr && ControlledPawn->GetClass() == PlayerStartByClass->PlayerClass)
 				return PlayerStartByClass;
@@ -51,7 +51,7 @@ AActor* AKokkuGameModeBase::ChoosePlayerStart(AController* Player)
 
 		if (PlayerStartByClass != nullptr)
 		{
-			APawn* ControlledPawn = Player->GetControlledPawn();
+			APawn* ControlledPawn = Player->GetPawn();
 
 			if (ControlledPawn != nullptr && PlayerStartByClass->PlayerClass != nullptr && ControlledPawn->IsA(PlayerStartByClass->PlayerClass))
 				return PlayerStartByClass;
