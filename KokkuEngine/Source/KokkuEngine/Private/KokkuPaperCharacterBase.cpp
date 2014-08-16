@@ -52,6 +52,7 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	this->WalkingSpeed = 600.0f;
 	this->RunningSpeed = 1500.0f;
 	this->RunningJumpVelocityBonus = 0.25f;
+	this->bDisableAnalogWalking = false;
 
 	// Configure character movement
 	this->CharacterMovement->bOrientRotationToMovement = false;
@@ -223,7 +224,10 @@ void AKokkuPaperCharacterBase::JumpPressedInput()
 {
 	this->bJumpButtonHeld = true;
 	if (this->CanJumpOverride())
+	{
+		this->LaunchCharacter(FVector(0.0f, 0.0f, this->CharacterMovement->JumpZVelocity), false, false);
 		this->Jump();
+	}
 }
 
 void AKokkuPaperCharacterBase::JumpReleasedInput()
@@ -257,5 +261,17 @@ void AKokkuPaperCharacterBase::RunReleasedInput()
 
 void AKokkuPaperCharacterBase::WalkLeftRightInput(float InputValue)
 {
-	this->AddMovementInput(FVector(1.0f, 0.0f, 0.0f), InputValue);
+	float NormalizedInput = InputValue;
+
+	if (this->bDisableAnalogWalking)
+	{
+		if (InputValue > 0.1f)
+			NormalizedInput = 1.0f;
+		else if (InputValue < -0.1f)
+			NormalizedInput = -1.0f;
+		else
+			NormalizedInput = 0.0f;
+	}
+
+	this->AddMovementInput(FVector(1.0f, 0.0f, 0.0f), NormalizedInput);
 }

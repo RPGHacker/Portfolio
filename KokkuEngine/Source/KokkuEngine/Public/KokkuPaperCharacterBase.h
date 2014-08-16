@@ -49,6 +49,10 @@ class KOKKUENGINE_API AKokkuPaperCharacterBase : public APaperCharacter
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character, meta = (DisplayThumbnail = "true"))
 	class UPaperFlipbook* DuckAnimation;
 
+	/** Disable analog walking */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character)
+	uint32 bDisableAnalogWalking : 1;
+
 	/** Max walking speed */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character)
 	float WalkingSpeed;
