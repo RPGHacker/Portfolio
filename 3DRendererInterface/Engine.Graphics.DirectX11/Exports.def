@@ -1,0 +1,3 @@
+LIBRARY	"Engine.Graphics.DirectX11.dll"
+EXPORTS
+    CreateRenderDevice
