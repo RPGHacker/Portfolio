@@ -10,7 +10,7 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	: Super(PCIP.DoNotCreateDefaultSubobject(AKokkuPaperCharacterBase::KokkuSpriteComponentName))
 {
 	// Try to create the sprite component
-	this->AnimatedSprite = PCIP.CreateDefaultSubobject<UKokkuPaperFlipbookComponent>(this, AKokkuPaperCharacterBase::KokkuSpriteComponentName);
+	this->AnimatedSprite = PCIP.CreateDefaultSubobject<class UKokkuPaperFlipbookComponent>(this, AKokkuPaperCharacterBase::KokkuSpriteComponentName);
 	if (this->AnimatedSprite)
 	{
 		this->AnimatedSprite->AlwaysLoadOnClient = true;
@@ -41,7 +41,7 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	this->CapsuleComponent->SetCapsuleRadius(40.0f);
 
 	// Create an orthographic camera (no perspective) and attach it to the boom
-	this->CharacterCamera = PCIP.CreateDefaultSubobject<UCameraComponent>(this, TEXT("SideViewCamera"));
+	this->CharacterCamera = PCIP.CreateDefaultSubobject<class UCameraComponent>(this, TEXT("SideViewCamera"));
 	this->CharacterCamera->ProjectionMode = ECameraProjectionMode::Orthographic;
 	this->CharacterCamera->OrthoWidth = 2048.0f;
 	this->CharacterCamera->bUseControllerViewRotation = false;
@@ -78,6 +78,10 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	this->SetActorTickEnabled(true);
 
 	this->bRunButtonHeld = false;
+	this->CarriedActor = nullptr;
+
+	// Entity interface
+	this->CarryAttachParent = this->AnimatedSprite;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -94,12 +98,14 @@ void AKokkuPaperCharacterBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	// Update camera
 	FVector CameraPosition = this->CharacterCamera->GetComponentLocation();
 	this->CharacterCamera->bAbsoluteLocation = true;
 	this->CharacterCamera->bAbsoluteRotation = true;
 	CameraPosition.X = this->CapsuleComponent->GetComponentLocation().X;
 	this->CharacterCamera->SetWorldLocation(CameraPosition);
 
+	// Jump physics
 	float JumpSpeed = this->GetVelocity().Z;
 	if (JumpSpeed < 0.0f)
 		this->bJumpButtonHeld = false;
@@ -119,6 +125,36 @@ void AKokkuPaperCharacterBase::Tick(float DeltaSeconds)
 		this->CharacterMovement->JumpZVelocity = this->InitialJumpVelocity + JumpVelocityBonus;
 
 		this->CharacterMovement->MaxWalkSpeedCrouched = 0.0f;
+	}
+
+	// Carrying objects
+	if (this->CarriedActor == nullptr)
+	{
+		if (this->bRunButtonHeld)
+		{
+			TArray<class AActor*> OverlappingActors;
+			this->GetOverlappingActors(OverlappingActors, nullptr);
+
+			// Find carriable actor
+			class AActor* FoundActor = nullptr;
+			class IKokkuEntity* InterfaceInstance = nullptr;
+
+			for (TArray<class AActor*>::TIterator ActorIter(OverlappingActors); ActorIter && !FoundActor; ++ActorIter)
+			{
+				class AActor* CurrentActor = *ActorIter;
+				InterfaceInstance = InterfaceCast<IKokkuEntity>(CurrentActor);
+
+				if (InterfaceInstance != nullptr && InterfaceInstance->bIsCarryable)
+					FoundActor = CurrentActor;
+			}
+
+			// Carry object if found
+			if (FoundActor != nullptr && InterfaceInstance != nullptr)
+			{
+				this->CarriedActor = FoundActor;
+				InterfaceInstance->OnStartCarry(this);
+			}
+		}
 	}
 
 	this->UpdateAnimation();
@@ -257,6 +293,18 @@ void AKokkuPaperCharacterBase::RunPressedInput()
 void AKokkuPaperCharacterBase::RunReleasedInput()
 {
 	this->bRunButtonHeld = false;
+
+	if (this->CarriedActor != nullptr)
+	{
+		class IKokkuEntity* InterfaceInstance = InterfaceCast<IKokkuEntity>(this->CarriedActor);
+
+		if (InterfaceInstance != nullptr)
+		{
+			InterfaceInstance->OnStopCarry(this, FVector(0.0f, -1.0f, 0.0f));
+		}
+
+		this->CarriedActor = nullptr;
+	}
 }
 
 void AKokkuPaperCharacterBase::WalkLeftRightInput(float InputValue)

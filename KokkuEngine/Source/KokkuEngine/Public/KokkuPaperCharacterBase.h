@@ -3,6 +3,7 @@
 #pragma once
 
 #include "PaperCharacter.h"
+#include "KokkuEntity.h"
 #include "KokkuPaperFlipbookComponent.h"
 #include "KokkuPaperCharacterBase.generated.h"
 
@@ -10,7 +11,7 @@
  * Case class for paper characters
  */
 UCLASS()
-class KOKKUENGINE_API AKokkuPaperCharacterBase : public APaperCharacter
+class KOKKUENGINE_API AKokkuPaperCharacterBase : public APaperCharacter, public IKokkuEntity
 {
 	GENERATED_UCLASS_BODY()
 
@@ -71,6 +72,9 @@ protected:
 
 	/** Character is holding jump button*/
 	bool bJumpButtonHeld;
+
+	/** Actor currently being carried by this character */
+	AActor* CarriedActor;
 
 	/** Can jump override */
 	bool CanJumpOverride();

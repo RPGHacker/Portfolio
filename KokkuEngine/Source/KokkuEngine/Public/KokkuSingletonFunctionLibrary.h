@@ -19,7 +19,9 @@ class KOKKUENGINE_API UKokkuSingletonFunctionLibrary : public UBlueprintFunction
 	UFUNCTION(BlueprintPure, Category = "Kokku Singleton")
 	static class UKokkuSingleton* GetKokkuSingleton();
 
-	/** Return game instance */
+	/** Return game instance
+	* @param		WorldContextObject		An object to get world context from
+	*/
 	UFUNCTION(BlueprintPure, Category = "Kokku Game Instance", meta = (HidePin = "WorldContextObject", DefaultToSelf = "WorldContextObject"))
 	static class UKokkuGameInstance* GetKokkuGameInstance(UObject* WorldContextObject);
 };
