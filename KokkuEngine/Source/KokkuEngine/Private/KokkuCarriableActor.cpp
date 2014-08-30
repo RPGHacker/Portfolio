@@ -16,22 +16,11 @@ AKokkuCarriableActor::AKokkuCarriableActor(const class FPostConstructInitializeP
 	this->CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	this->CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	this->CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
-	this->CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Block);
-	this->CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+	//this->CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Block);
+	//this->CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
 	this->CollisionBox->SetSimulatePhysics(true);
 	this->CollisionBox->SetEnableGravity(true);
 	this->CollisionBox->AttachTo(this->ActorRoot);
-
-	// Create overlap box
-	this->OverlapBox = PCIP.CreateDefaultSubobject<class UBoxComponent>(this, FName(TEXT("OverlapBox")));
-	this->OverlapBox->InitBoxExtent(FVector(75.0f, 75.0f, 75.0f));
-	this->OverlapBox->SetCollisionProfileName(FName(TEXT("WorldDynamic")));
-	this->OverlapBox->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
-	this->OverlapBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	this->OverlapBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	this->OverlapBox->SetSimulatePhysics(false);
-	this->OverlapBox->SetEnableGravity(false);
-	this->OverlapBox->AttachTo(this->CollisionBox);
 
 	// Create physics constraint
 	this->PhysicsConstraint = PCIP.CreateDefaultSubobject<class UPhysicsConstraintComponent>(this, FName(TEXT("PhysicsConstraint")));
@@ -64,6 +53,7 @@ void AKokkuCarriableActor::OnStartCarry(class AActor* CarriedBy)
 		this->CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		this->PhysicsConstraint->ConstraintInstance.TermConstraint();
 		this->CollisionBox->AttachTo(InterfaceInstance->CarryAttachParent, NAME_None, EAttachLocation::KeepWorldPosition);
+		this->CollisionBox->SetRelativeLocation(FVector::ZeroVector);
 	}
 }
 

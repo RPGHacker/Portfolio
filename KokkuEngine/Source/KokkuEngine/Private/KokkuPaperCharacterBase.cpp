@@ -9,6 +9,10 @@ FName AKokkuPaperCharacterBase::KokkuSpriteComponentName(TEXT("Sprite0"));
 AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructInitializeProperties& PCIP)
 	: Super(PCIP.DoNotCreateDefaultSubobject(AKokkuPaperCharacterBase::KokkuSpriteComponentName))
 {
+	// Create anchor
+	this->SpriteAnchor = PCIP.CreateDefaultSubobject<class USceneComponent>(this, TEXT("SpriteAnchor"));
+	this->SpriteAnchor->AttachTo(this->CapsuleComponent);
+
 	// Try to create the sprite component
 	this->AnimatedSprite = PCIP.CreateDefaultSubobject<class UKokkuPaperFlipbookComponent>(this, AKokkuPaperCharacterBase::KokkuSpriteComponentName);
 	if (this->AnimatedSprite)
@@ -25,7 +29,7 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 			this->AnimatedSprite->PrimaryComponentTick.AddPrerequisite(this, this->CharacterMovement->PrimaryComponentTick);
 		}
 
-		this->AnimatedSprite->AttachParent = this->CapsuleComponent;
+		this->AnimatedSprite->AttachParent = this->SpriteAnchor;
 		static FName CollisionProfileName(TEXT("CharacterMesh"));
 		this->AnimatedSprite->SetCollisionProfileName(CollisionProfileName);
 		this->AnimatedSprite->bGenerateOverlapEvents = false;
@@ -43,14 +47,31 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	// Create an orthographic camera (no perspective) and attach it to the boom
 	this->CharacterCamera = PCIP.CreateDefaultSubobject<class UCameraComponent>(this, TEXT("SideViewCamera"));
 	this->CharacterCamera->ProjectionMode = ECameraProjectionMode::Orthographic;
-	this->CharacterCamera->OrthoWidth = 2048.0f;
+	this->CharacterCamera->OrthoWidth = 4096.0f;
 	this->CharacterCamera->bUseControllerViewRotation = false;
 	this->CharacterCamera->AttachTo(this->CapsuleComponent, NAME_None);
-	this->CharacterCamera->SetRelativeLocation(FVector(0.0f, 500.0f, 0.0f));
+	this->CharacterCamera->SetRelativeLocation(FVector(0.0f, 1000.0f, 500.0f));
 	this->CharacterCamera->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 
-	this->WalkingSpeed = 600.0f;
-	this->RunningSpeed = 1500.0f;
+	// Create carry anchor
+	this->CarryAnchor = PCIP.CreateDefaultSubobject<class USceneComponent>(this, TEXT("CarryAnchor"));
+	this->CarryAnchor->AttachTo(this->SpriteAnchor, NAME_None);
+	this->CarryAnchor->SetRelativeLocation(FVector(50.0f, 0.0f, 0.0f));
+
+	// Create carry sphere
+	this->CarrySphere = PCIP.CreateDefaultSubobject<class USphereComponent>(this, TEXT("CarrySphere"));
+	this->CarrySphere->SetSphereRadius(25.0f, false);
+	this->CarrySphere->SetCollisionProfileName(FName(TEXT("WorldDynamic")));
+	this->CarrySphere->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	this->CarrySphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	this->CarrySphere->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	this->CarrySphere->SetSimulatePhysics(false);
+	this->CarrySphere->SetEnableGravity(false);
+	this->CarrySphere->AttachTo(this->SpriteAnchor, NAME_None);
+	this->CarrySphere->SetRelativeLocation(FVector(this->CapsuleComponent->GetUnscaledCapsuleRadius() + this->CarrySphere->GetScaledSphereRadius(), 0.0f, this->CarrySphere->GetScaledSphereRadius() - this->CapsuleComponent->GetUnscaledCapsuleHalfHeight()));
+
+	this->WalkingSpeed = 800.0f;
+	this->RunningSpeed = 2000.0f;
 	this->RunningJumpVelocityBonus = 0.25f;
 	this->bDisableAnalogWalking = false;
 
@@ -65,7 +86,7 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	this->CharacterMovement->GroundFriction = 3.0f;
 	this->CharacterMovement->MaxWalkSpeed = this->WalkingSpeed;
 	this->CharacterMovement->MaxFlySpeed = this->RunningSpeed;
-	this->CharacterMovement->JumpZVelocity = 500.0f;
+	this->CharacterMovement->JumpZVelocity = 750.0f;
 	this->CharacterMovement->MaxWalkSpeedCrouched = 0.0f;
 	this->CharacterMovement->bUseFlatBaseForFloorChecks = true;
 
@@ -81,7 +102,7 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	this->CarriedActor = nullptr;
 
 	// Entity interface
-	this->CarryAttachParent = this->AnimatedSprite;
+	this->CarryAttachParent = this->CarryAnchor;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -133,7 +154,7 @@ void AKokkuPaperCharacterBase::Tick(float DeltaSeconds)
 		if (this->bRunButtonHeld)
 		{
 			TArray<class AActor*> OverlappingActors;
-			this->GetOverlappingActors(OverlappingActors, nullptr);
+			this->CarrySphere->GetOverlappingActors(OverlappingActors, nullptr);
 
 			// Find carriable actor
 			class AActor* FoundActor = nullptr;
@@ -174,12 +195,12 @@ void AKokkuPaperCharacterBase::UpdateAnimation()
 		if (WalkSpeed < 0.0f)
 		{
 			// We are facing left
-			this->AnimatedSprite->SetRelativeRotation(FRotator(0.0, 180.0f, 0.0f));
+			this->SpriteAnchor->SetRelativeRotation(FRotator(0.0, 180.0f, 0.0f));
 		}
 		else if (WalkSpeed > 0.0f)
 		{
 			// We are facing right
-			this->AnimatedSprite->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+			this->SpriteAnchor->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 		}
 
 		WalkSpeed = FMath::Abs(WalkSpeed);
@@ -188,7 +209,7 @@ void AKokkuPaperCharacterBase::UpdateAnimation()
 			NewAnimation = this->DuckAnimation;		// Currently ducking
 		else if (WalkSpeed < 1.0f)
 			NewAnimation = this->IdleAnimation;		// Standing still
-		else if (this->bRunButtonHeld)
+		else if (this->bRunButtonHeld && FMath::Abs(this->GetVelocity().X) >= this->WalkingSpeed)
 		{
 			// Currently running
 			PlayRate = FMath::Clamp<float>(WalkSpeed, this->CharacterMovement->MaxWalkSpeed * 0.1f, this->CharacterMovement->MaxWalkSpeed) / this->CharacterMovement->MaxWalkSpeed;

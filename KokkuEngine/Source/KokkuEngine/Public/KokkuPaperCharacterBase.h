@@ -18,13 +18,25 @@ class KOKKUENGINE_API AKokkuPaperCharacterBase : public APaperCharacter, public 
 	/** Name of the flipbook component */
 	static FName KokkuSpriteComponentName;
 
+	/** Anchor for animated sprite */
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
+	TSubobjectPtr<class USceneComponent> SpriteAnchor;
+
 	/** This character's flipbook component */
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
 	TSubobjectPtr<class UKokkuPaperFlipbookComponent> AnimatedSprite;
 
 	/** Character's default camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Character)
-	TSubobjectPtr<UCameraComponent> CharacterCamera;
+	TSubobjectPtr<class UCameraComponent> CharacterCamera;
+
+	/** Anchor for carrying items */
+	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
+	TSubobjectPtr<class USceneComponent> CarryAnchor;
+
+	/** Sphere for carrying objects */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Character)
+	TSubobjectPtr<class USphereComponent> CarrySphere;
 
 	/** Character's idle animation */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character, meta = (DisplayThumbnail = "true"))

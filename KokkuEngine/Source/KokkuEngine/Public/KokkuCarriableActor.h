@@ -17,10 +17,6 @@ class KOKKUENGINE_API AKokkuCarriableActor : public AKokkuBaseActor
 	UPROPERTY(Category = CarriableActor, VisibleAnywhere, BlueprintReadOnly)
 	TSubobjectPtr<class UBoxComponent> CollisionBox;
 
-	/** Object's overlap box */
-	UPROPERTY(Category = CarriableActor, VisibleAnywhere, BlueprintReadOnly)
-	TSubobjectPtr<class UBoxComponent> OverlapBox;
-
 	/** Constraint for locking object's rotation */
 	UPROPERTY(Category = CarriableActor, VisibleAnywhere, BlueprintReadOnly)
 	TSubobjectPtr<class UPhysicsConstraintComponent> PhysicsConstraint;
