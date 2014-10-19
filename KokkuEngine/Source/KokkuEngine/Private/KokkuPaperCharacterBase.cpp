@@ -48,7 +48,7 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	this->CharacterCamera = PCIP.CreateDefaultSubobject<class UCameraComponent>(this, TEXT("SideViewCamera"));
 	this->CharacterCamera->ProjectionMode = ECameraProjectionMode::Orthographic;
 	this->CharacterCamera->OrthoWidth = 4096.0f;
-	this->CharacterCamera->bUseControllerViewRotation = false;
+	this->CharacterCamera->bUsePawnControlRotation = false;
 	this->CharacterCamera->AttachTo(this->CapsuleComponent, NAME_None);
 	this->CharacterCamera->SetRelativeLocation(FVector(0.0f, 1000.0f, 500.0f));
 	this->CharacterCamera->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
