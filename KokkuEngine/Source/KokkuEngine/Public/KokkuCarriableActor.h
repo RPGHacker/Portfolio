@@ -15,11 +15,11 @@ class KOKKUENGINE_API AKokkuCarriableActor : public AKokkuBaseActor
 
 	/** Object's collision box */
 	UPROPERTY(Category = CarriableActor, VisibleAnywhere, BlueprintReadOnly)
-	TSubobjectPtr<class UBoxComponent> CollisionBox;
+	class UBoxComponent* CollisionBox;
 
 	/** Constraint for locking object's rotation */
 	UPROPERTY(Category = CarriableActor, VisibleAnywhere, BlueprintReadOnly)
-	TSubobjectPtr<class UPhysicsConstraintComponent> PhysicsConstraint;
+	class UPhysicsConstraintComponent* PhysicsConstraint;
 
 	// IKokkuEntity interface
 	virtual void OnStartCarry(class AActor* CarriedBy) override;

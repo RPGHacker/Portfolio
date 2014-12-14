@@ -20,23 +20,23 @@ class KOKKUENGINE_API AKokkuPaperCharacterBase : public APaperCharacter, public 
 
 	/** Anchor for animated sprite */
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
-	TSubobjectPtr<class USceneComponent> SpriteAnchor;
+	class USceneComponent* SpriteAnchor;
 
 	/** This character's flipbook component */
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
-	TSubobjectPtr<class UKokkuPaperFlipbookComponent> AnimatedSprite;
+	class UKokkuPaperFlipbookComponent* AnimatedSprite;
 
 	/** Character's default camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Character)
-	TSubobjectPtr<class UCameraComponent> CharacterCamera;
+	class UCameraComponent* CharacterCamera;
 
 	/** Anchor for carrying items */
 	UPROPERTY(Category = Character, VisibleAnywhere, BlueprintReadOnly)
-	TSubobjectPtr<class USceneComponent> CarryAnchor;
+	class USceneComponent* CarryAnchor;
 
 	/** Sphere for carrying objects */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Character)
-	TSubobjectPtr<class USphereComponent> CarrySphere;
+	class USphereComponent* CarrySphere;
 
 	/** Character's idle animation */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Character, meta = (DisplayThumbnail = "true"))

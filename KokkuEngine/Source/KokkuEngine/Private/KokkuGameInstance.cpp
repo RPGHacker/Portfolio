@@ -4,7 +4,7 @@
 #include "KokkuGameInstance.h"
 
 
-UKokkuGameInstance::UKokkuGameInstance(const class FPostConstructInitializeProperties& PCIP)
+UKokkuGameInstance::UKokkuGameInstance(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 }

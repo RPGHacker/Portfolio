@@ -4,7 +4,7 @@
 #include "KokkuSingletonFunctionLibrary.h"
 
 
-UKokkuSingletonFunctionLibrary::UKokkuSingletonFunctionLibrary(const class FPostConstructInitializeProperties& PCIP)
+UKokkuSingletonFunctionLibrary::UKokkuSingletonFunctionLibrary(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 }

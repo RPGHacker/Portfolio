@@ -6,12 +6,12 @@
 
 FName AKokkuPaperCharacterBase::KokkuSpriteComponentName(TEXT("Sprite0"));
 
-AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructInitializeProperties& PCIP)
+AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FObjectInitializer& PCIP)
 	: Super(PCIP.DoNotCreateDefaultSubobject(AKokkuPaperCharacterBase::KokkuSpriteComponentName))
 {
 	// Create anchor
 	this->SpriteAnchor = PCIP.CreateDefaultSubobject<class USceneComponent>(this, TEXT("SpriteAnchor"));
-	this->SpriteAnchor->AttachTo(this->CapsuleComponent);
+	this->SpriteAnchor->AttachTo(this->GetCapsuleComponent());
 
 	// Try to create the sprite component
 	this->AnimatedSprite = PCIP.CreateDefaultSubobject<class UKokkuPaperFlipbookComponent>(this, AKokkuPaperCharacterBase::KokkuSpriteComponentName);
@@ -24,9 +24,9 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 		this->AnimatedSprite->PrimaryComponentTick.TickGroup = TG_PrePhysics;
 
 		// force tick after movement component updates
-		if (this->CharacterMovement)
+		if (this->GetCharacterMovement())
 		{
-			this->AnimatedSprite->PrimaryComponentTick.AddPrerequisite(this, this->CharacterMovement->PrimaryComponentTick);
+			this->AnimatedSprite->PrimaryComponentTick.AddPrerequisite(this, this->GetCharacterMovement()->PrimaryComponentTick);
 		}
 
 		this->AnimatedSprite->AttachParent = this->SpriteAnchor;
@@ -41,15 +41,15 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	this->bUseControllerRotationRoll = false;
 
 	// Set the size of the collision capsule.
-	this->CapsuleComponent->SetCapsuleHalfHeight(96.0f);
-	this->CapsuleComponent->SetCapsuleRadius(40.0f);
+	this->GetCapsuleComponent()->SetCapsuleHalfHeight(96.0f);
+	this->GetCapsuleComponent()->SetCapsuleRadius(40.0f);
 
 	// Create an orthographic camera (no perspective) and attach it to the boom
 	this->CharacterCamera = PCIP.CreateDefaultSubobject<class UCameraComponent>(this, TEXT("SideViewCamera"));
 	this->CharacterCamera->ProjectionMode = ECameraProjectionMode::Orthographic;
 	this->CharacterCamera->OrthoWidth = 4096.0f;
 	this->CharacterCamera->bUsePawnControlRotation = false;
-	this->CharacterCamera->AttachTo(this->CapsuleComponent, NAME_None);
+	this->CharacterCamera->AttachTo(this->GetCapsuleComponent(), NAME_None);
 	this->CharacterCamera->SetRelativeLocation(FVector(0.0f, 1000.0f, 500.0f));
 	this->CharacterCamera->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 
@@ -68,7 +68,7 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	this->CarrySphere->SetSimulatePhysics(false);
 	this->CarrySphere->SetEnableGravity(false);
 	this->CarrySphere->AttachTo(this->SpriteAnchor, NAME_None);
-	this->CarrySphere->SetRelativeLocation(FVector(this->CapsuleComponent->GetUnscaledCapsuleRadius() + this->CarrySphere->GetScaledSphereRadius(), 0.0f, this->CarrySphere->GetScaledSphereRadius() - this->CapsuleComponent->GetUnscaledCapsuleHalfHeight()));
+	this->CarrySphere->SetRelativeLocation(FVector(this->GetCapsuleComponent()->GetUnscaledCapsuleRadius() + this->CarrySphere->GetScaledSphereRadius(), 0.0f, this->CarrySphere->GetScaledSphereRadius() - this->GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight()));
 
 	this->WalkingSpeed = 800.0f;
 	this->RunningSpeed = 2000.0f;
@@ -76,23 +76,23 @@ AKokkuPaperCharacterBase::AKokkuPaperCharacterBase(const class FPostConstructIni
 	this->bDisableAnalogWalking = false;
 
 	// Configure character movement
-	this->CharacterMovement->bOrientRotationToMovement = false;
-	this->CharacterMovement->NavAgentProps.bCanCrouch = true;
-	this->CharacterMovement->bCanWalkOffLedgesWhenCrouching = true;
-	this->CharacterMovement->CrouchedHalfHeight = 96.0f / 2.0f;
-	this->CharacterMovement->GravityScale = 2.0f;
-	this->CharacterMovement->AirControl = 0.80f;
+	this->GetCharacterMovement()->bOrientRotationToMovement = false;
+	this->GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+	this->GetCharacterMovement()->bCanWalkOffLedgesWhenCrouching = true;
+	this->GetCharacterMovement()->CrouchedHalfHeight = 96.0f / 2.0f;
+	this->GetCharacterMovement()->GravityScale = 2.0f;
+	this->GetCharacterMovement()->AirControl = 0.80f;
 	this->JumpMaxHoldTime = 0.25f;
-	this->CharacterMovement->GroundFriction = 3.0f;
-	this->CharacterMovement->MaxWalkSpeed = this->WalkingSpeed;
-	this->CharacterMovement->MaxFlySpeed = this->RunningSpeed;
-	this->CharacterMovement->JumpZVelocity = 750.0f;
-	this->CharacterMovement->MaxWalkSpeedCrouched = 0.0f;
-	this->CharacterMovement->bUseFlatBaseForFloorChecks = true;
+	this->GetCharacterMovement()->GroundFriction = 3.0f;
+	this->GetCharacterMovement()->MaxWalkSpeed = this->WalkingSpeed;
+	this->GetCharacterMovement()->MaxFlySpeed = this->RunningSpeed;
+	this->GetCharacterMovement()->JumpZVelocity = 750.0f;
+	this->GetCharacterMovement()->MaxWalkSpeedCrouched = 0.0f;
+	this->GetCharacterMovement()->bUseFlatBaseForFloorChecks = true;
 
 	// Lock character motion onto the XZ plane, so the character can't move in or out of the screen
-	this->CharacterMovement->bConstrainToPlane = true;
-	this->CharacterMovement->SetPlaneConstraintNormal(FVector(0.0f, -1.0f, 0.0f));
+	this->GetCharacterMovement()->bConstrainToPlane = true;
+	this->GetCharacterMovement()->SetPlaneConstraintNormal(FVector(0.0f, -1.0f, 0.0f));
 
 	// Enable tick
 	this->PrimaryActorTick.bCanEverTick = true;
@@ -112,7 +112,7 @@ void AKokkuPaperCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	this->InitialJumpVelocity = this->CharacterMovement->JumpZVelocity;
+	this->InitialJumpVelocity = this->GetCharacterMovement()->JumpZVelocity;
 }
 
 void AKokkuPaperCharacterBase::Tick(float DeltaSeconds)
@@ -123,7 +123,7 @@ void AKokkuPaperCharacterBase::Tick(float DeltaSeconds)
 	FVector CameraPosition = this->CharacterCamera->GetComponentLocation();
 	this->CharacterCamera->bAbsoluteLocation = true;
 	this->CharacterCamera->bAbsoluteRotation = true;
-	CameraPosition.X = this->CapsuleComponent->GetComponentLocation().X;
+	CameraPosition.X = this->GetCapsuleComponent()->GetComponentLocation().X;
 	this->CharacterCamera->SetWorldLocation(CameraPosition);
 
 	// Jump physics
@@ -131,21 +131,21 @@ void AKokkuPaperCharacterBase::Tick(float DeltaSeconds)
 	if (JumpSpeed < 0.0f)
 		this->bJumpButtonHeld = false;
 	
-	if (this->CharacterMovement->IsFalling())
+	if (this->GetCharacterMovement()->IsFalling())
 	{
-		this->CharacterMovement->MaxWalkSpeedCrouched = this->CharacterMovement->MaxWalkSpeed;
+		this->GetCharacterMovement()->MaxWalkSpeedCrouched = this->GetCharacterMovement()->MaxWalkSpeed;
 	}
 	else
 	{
 		if (this->bRunButtonHeld)
-			this->CharacterMovement->MaxWalkSpeed = this->RunningSpeed;
+			this->GetCharacterMovement()->MaxWalkSpeed = this->RunningSpeed;
 		else
-			this->CharacterMovement->MaxWalkSpeed = this->WalkingSpeed;
+			this->GetCharacterMovement()->MaxWalkSpeed = this->WalkingSpeed;
 
 		float JumpVelocityBonus = FMath::Clamp<float>((FMath::Abs(this->GetVelocity().X) - this->WalkingSpeed) / (this->RunningSpeed / this->WalkingSpeed), 0.0f, 1.0f) * this->RunningJumpVelocityBonus * this->InitialJumpVelocity;
-		this->CharacterMovement->JumpZVelocity = this->InitialJumpVelocity + JumpVelocityBonus;
+		this->GetCharacterMovement()->JumpZVelocity = this->InitialJumpVelocity + JumpVelocityBonus;
 
-		this->CharacterMovement->MaxWalkSpeedCrouched = 0.0f;
+		this->GetCharacterMovement()->MaxWalkSpeedCrouched = 0.0f;
 	}
 
 	// Carrying objects
@@ -163,7 +163,7 @@ void AKokkuPaperCharacterBase::Tick(float DeltaSeconds)
 			for (TArray<class AActor*>::TIterator ActorIter(OverlappingActors); ActorIter && !FoundActor; ++ActorIter)
 			{
 				class AActor* CurrentActor = *ActorIter;
-				InterfaceInstance = InterfaceCast<IKokkuEntity>(CurrentActor);
+				InterfaceInstance = Cast<IKokkuEntity>(CurrentActor);
 
 				if (InterfaceInstance != nullptr && InterfaceInstance->bIsCarryable)
 					FoundActor = CurrentActor;
@@ -187,7 +187,7 @@ void AKokkuPaperCharacterBase::UpdateAnimation()
 	bool bLoopAnimation = true;
 	float PlayRate = 1.0f;
 
-	if (!(this->CharacterMovement->IsFalling()))
+	if (!(this->GetCharacterMovement()->IsFalling()))
 	{
 		// We are currently touching the ground
 		float WalkSpeed = this->GetVelocity().X;
@@ -212,13 +212,13 @@ void AKokkuPaperCharacterBase::UpdateAnimation()
 		else if (this->bRunButtonHeld && FMath::Abs(this->GetVelocity().X) >= this->WalkingSpeed)
 		{
 			// Currently running
-			PlayRate = FMath::Clamp<float>(WalkSpeed, this->CharacterMovement->MaxWalkSpeed * 0.1f, this->CharacterMovement->MaxWalkSpeed) / this->CharacterMovement->MaxWalkSpeed;
+			PlayRate = FMath::Clamp<float>(WalkSpeed, this->GetCharacterMovement()->MaxWalkSpeed * 0.1f, this->GetCharacterMovement()->MaxWalkSpeed) / this->GetCharacterMovement()->MaxWalkSpeed;
 			NewAnimation = this->RunAnimation;
 		}
 		else
 		{
 			// Currently walking
-			PlayRate = FMath::Clamp<float>(WalkSpeed, this->CharacterMovement->MaxWalkSpeed * 0.1f, this->CharacterMovement->MaxWalkSpeed) / this->CharacterMovement->MaxWalkSpeed;
+			PlayRate = FMath::Clamp<float>(WalkSpeed, this->GetCharacterMovement()->MaxWalkSpeed * 0.1f, this->GetCharacterMovement()->MaxWalkSpeed) / this->GetCharacterMovement()->MaxWalkSpeed;
 			NewAnimation = this->WalkAnimation;
 		}
 	}
@@ -255,7 +255,7 @@ bool AKokkuPaperCharacterBase::CanJumpOverride()
 	// TODO: Fix me
 	const bool bCanHoldToJumpHigher = (this->GetJumpMaxHoldTime() > 0.0f) && this->IsJumpProvidingForce();
 
-	return this->CharacterMovement && (this->CharacterMovement->IsMovingOnGround() || bCanHoldToJumpHigher) && this->CharacterMovement->CanEverJump();
+	return this->GetCharacterMovement() && (this->GetCharacterMovement()->IsMovingOnGround() || bCanHoldToJumpHigher) && this->GetCharacterMovement()->CanEverJump();
 }
 
 bool AKokkuPaperCharacterBase::CanCrouch()
@@ -282,7 +282,7 @@ void AKokkuPaperCharacterBase::JumpPressedInput()
 	this->bJumpButtonHeld = true;
 	if (this->CanJumpOverride())
 	{
-		this->LaunchCharacter(FVector(0.0f, 0.0f, this->CharacterMovement->JumpZVelocity), false, false);
+		this->LaunchCharacter(FVector(0.0f, 0.0f, this->GetCharacterMovement()->JumpZVelocity), false, false);
 		this->Jump();
 	}
 }
@@ -317,7 +317,7 @@ void AKokkuPaperCharacterBase::RunReleasedInput()
 
 	if (this->CarriedActor != nullptr)
 	{
-		class IKokkuEntity* InterfaceInstance = InterfaceCast<IKokkuEntity>(this->CarriedActor);
+		class IKokkuEntity* InterfaceInstance = Cast<IKokkuEntity>(this->CarriedActor);
 
 		if (InterfaceInstance != nullptr)
 		{

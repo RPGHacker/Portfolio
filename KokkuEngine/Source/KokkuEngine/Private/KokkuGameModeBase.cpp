@@ -4,7 +4,7 @@
 #include "KokkuGameModeBase.h"
 
 
-AKokkuGameModeBase::AKokkuGameModeBase(const class FPostConstructInitializeProperties& PCIP)
+AKokkuGameModeBase::AKokkuGameModeBase(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 }

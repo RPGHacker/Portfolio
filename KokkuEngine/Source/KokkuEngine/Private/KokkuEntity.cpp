@@ -4,7 +4,7 @@
 #include "KokkuEntity.h"
 
 
-UKokkuEntity::UKokkuEntity(const class FPostConstructInitializeProperties& PCIP)
+UKokkuEntity::UKokkuEntity(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 }

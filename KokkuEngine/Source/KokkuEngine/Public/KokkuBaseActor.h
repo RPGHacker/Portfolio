@@ -16,5 +16,5 @@ class KOKKUENGINE_API AKokkuBaseActor : public AActor, public IKokkuEntity
 
 	/** Actor's root component */
 	UPROPERTY(Category = KokkuActor, VisibleAnywhere, BlueprintReadOnly)
-	TSubobjectPtr<class USceneComponent> ActorRoot;
+	class USceneComponent* ActorRoot;
 };

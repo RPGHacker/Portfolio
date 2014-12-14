@@ -4,7 +4,7 @@
 #include "KokkuLevelScriptActor.h"
 
 
-AKokkuLevelScriptActor::AKokkuLevelScriptActor(const class FPostConstructInitializeProperties& PCIP)
+AKokkuLevelScriptActor::AKokkuLevelScriptActor(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	this->LevelName = NSLOCTEXT("Level Names", "Default Level Name", "New Level");

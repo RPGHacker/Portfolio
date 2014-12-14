@@ -4,7 +4,7 @@
 #include "KokkuCarriableActor.h"
 
 
-AKokkuCarriableActor::AKokkuCarriableActor(const class FPostConstructInitializeProperties& PCIP)
+AKokkuCarriableActor::AKokkuCarriableActor(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	// Create collision box
@@ -45,7 +45,7 @@ AKokkuCarriableActor::AKokkuCarriableActor(const class FPostConstructInitializeP
 
 void AKokkuCarriableActor::OnStartCarry(class AActor* CarriedBy)
 {
-	class IKokkuEntity* InterfaceInstance = InterfaceCast<class IKokkuEntity>(CarriedBy);
+	class IKokkuEntity* InterfaceInstance = Cast<class IKokkuEntity>(CarriedBy);
 
 	if (InterfaceInstance != nullptr && InterfaceInstance->CarryAttachParent != nullptr)
 	{
@@ -59,7 +59,7 @@ void AKokkuCarriableActor::OnStartCarry(class AActor* CarriedBy)
 
 void AKokkuCarriableActor::OnStopCarry(class AActor* CarriedBy, FVector InputVector)
 {
-	class IKokkuEntity* InterfaceInstance = InterfaceCast<class IKokkuEntity>(CarriedBy);
+	class IKokkuEntity* InterfaceInstance = Cast<class IKokkuEntity>(CarriedBy);
 
 	if (InterfaceInstance != nullptr && InterfaceInstance->CarryAttachParent != nullptr)
 	{

@@ -4,7 +4,7 @@
 #include "KokkuBaseActor.h"
 
 
-AKokkuBaseActor::AKokkuBaseActor(const class FPostConstructInitializeProperties& PCIP)
+AKokkuBaseActor::AKokkuBaseActor(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	// Create root component

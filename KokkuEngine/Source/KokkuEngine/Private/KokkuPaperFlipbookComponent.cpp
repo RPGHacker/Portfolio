@@ -4,7 +4,7 @@
 #include "KokkuPaperFlipbookComponent.h"
 
 
-UKokkuPaperFlipbookComponent::UKokkuPaperFlipbookComponent(const class FPostConstructInitializeProperties& PCIP)
+UKokkuPaperFlipbookComponent::UKokkuPaperFlipbookComponent(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 

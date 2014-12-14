@@ -2,7 +2,7 @@
 #include "KokkuEngine.h"
 #include "KokkuPaperFlipbookFactory.h"
 
-UKokkuPaperFlipbookFactory::UKokkuPaperFlipbookFactory(const class FPostConstructInitializeProperties& PCIP)
+UKokkuPaperFlipbookFactory::UKokkuPaperFlipbookFactory(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 	this->bCreateNew = true;

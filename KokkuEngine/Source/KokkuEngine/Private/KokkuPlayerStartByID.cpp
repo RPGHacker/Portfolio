@@ -4,7 +4,7 @@
 #include "KokkuPlayerStartByID.h"
 
 
-AKokkuPlayerStartByID::AKokkuPlayerStartByID(const class FPostConstructInitializeProperties& PCIP)
+AKokkuPlayerStartByID::AKokkuPlayerStartByID(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 }

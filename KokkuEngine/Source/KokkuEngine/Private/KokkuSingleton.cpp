@@ -4,7 +4,7 @@
 #include "KokkuSingleton.h"
 
 
-UKokkuSingleton::UKokkuSingleton(const class FPostConstructInitializeProperties& PCIP)
+UKokkuSingleton::UKokkuSingleton(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
 }
