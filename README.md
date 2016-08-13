@@ -3,11 +3,11 @@ Portfolio of Markus Wall
 
 Welcome to my Portfolio! This Github repository is a collection of some of my personal projects, including full source code.
 
+**NOTE:** This repository is updated rarely and a lot of my work on here is outdated. Most of my more recent code is still private, but shall be made public once it progresses far enough.
+
 
 Project List
 ------------
-
-*NOTE:* This repository is updated rarely and a lot of my work on here is outdated. Most of my more recent code is still private, but shall be made publich once it progress far enough.
 
 **Custom Calendar (2016)**
 
