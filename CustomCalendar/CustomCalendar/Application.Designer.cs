@@ -40,6 +40,8 @@
             this.customCalendar.Location = new System.Drawing.Point(12, 12);
             this.customCalendar.MinimumSize = new System.Drawing.Size(300, 300);
             this.customCalendar.Name = "customCalendar";
+            this.customCalendar.SelectedMonthIndex = 0;
+            this.customCalendar.SelectedYear = 0;
             this.customCalendar.Size = new System.Drawing.Size(300, 331);
             this.customCalendar.TabIndex = 0;
             // 
