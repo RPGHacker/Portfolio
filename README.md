@@ -5,7 +5,7 @@ Welcome to my portfolio! This Github repository is a collection of some of my pe
 
 **NOTE:** This repository is updated rarely and a lot of my work on here is outdated. Most of my more recent code is still private, but shall be made public once it progresses far enough.
 
-If you're interested in a complete list of games I worked on as a professional programmer, please visit my [portfolio page](http://portfolio.rpg-hacker.de/).
+If you're interested in a complete list of games I have worked on as a professional programmer, please visit my [portfolio page](http://portfolio.rpg-hacker.de/).
 
 
 
@@ -21,7 +21,7 @@ A calendar application requested by a friend. It works similar to the Windows ca
 
 **Web Model Viewer (2015)**
 
-A 3D model viewer built in Unity 3D. I originally started making this for my girlfriend's portfolio website. The original idea was to insert models and animations into it, then export it as a Flash or WebGL player and embed it in a website. My girlfriend ended up not needing a model viewer after all, so this was never fully finished and went unused, but even in it's current state it's already quite capable and polished. You can select between a number of different skyboxes and materials to view, enable different viewing options and angles, and navigate the scene using controls similar to Maya or Unity 3D. Options for selecting different models and animations to view were planned for the final version.
+A 3D model viewer built in Unity 3D. I originally started making this for my girlfriend's portfolio website. The original idea was to insert models and animations into it, then export it as a Flash or WebGL player and embed it into a website. My girlfriend ended up not needing a model viewer after all, so this was never fully finished and went unused, but even in it's current state it's already quite capable and polished. You can select between a number of different skyboxes and materials to view, enable different viewing options and angles, and navigate the scene using controls similar to Maya and Unity 3D. Options for selecting different models and animations to view were planned for the final version.
 
 Skybox images © 2015 Stella B. & [Games Academy](http://games-academy.de/)
 
